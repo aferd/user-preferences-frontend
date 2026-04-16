@@ -73,6 +73,10 @@ export const useChrome = () => {
         resourceDefinitions: []
       },
     ]),
+    chromeHistory: {
+      push: () => {},
+      block: () => () => {},
+    },
     ...chromeConfig
   }), [chromeConfig]);
 };

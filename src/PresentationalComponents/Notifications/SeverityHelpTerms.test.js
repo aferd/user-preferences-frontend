@@ -7,7 +7,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 // in a minimal setup, or by extracting and testing the rendered DOM directly.
 // For better testability, we'll test the rendered output expectations.
 
-// Mock useFlag to control severity feature flag for these tests
 const mockUseFlag = jest.fn().mockReturnValue(true);
 jest.mock('@unleash/proxy-client-react', () => ({
   useFlag: (...args) => mockUseFlag(...args),
