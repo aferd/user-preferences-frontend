@@ -293,4 +293,102 @@ describe('prepareFields', () => {
     expect(instantField.description).toBeUndefined();
     expect(drawerField.description).toBeUndefined();
   });
+
+  it('sets non-admin help text for custom threshold when isOrgAdmin is false', () => {
+    const notifPref = {
+      subscriptions: {
+        label: 'Subscriptions',
+        applications: {
+          usage: {
+            label: 'Usage',
+            eventTypes: [
+              {
+                name: 'CUSTOM_THRESHOLD',
+                label: 'Custom subscription threshold exceeded',
+                fields: [
+                  {
+                    name: 'bundles[subscriptions].applications[usage].eventTypes[CUSTOM_THRESHOLD].emailSubscriptionTypes[INSTANT]',
+                    label: 'Instant notification',
+                    severities: [
+                      {
+                        name: 'MODERATE',
+                        initialValue: false,
+                        disabled: false,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+    const result = prepareFields(
+      notifPref,
+      {},
+      {},
+      true,
+      85,
+      false // isOrgAdmin = false
+    );
+    const tab = result[0].fields[0];
+    const eventInput = tab.fields.find((f) => f.name === 'event-notifications');
+    const eventCard = eventInput.fields[0];
+
+    expect(eventCard.eventLabel).toBe('Usage at custom percentage');
+    expect(eventCard.description).toBe('Custom percentage has been set to 85%');
+    expect(eventCard.helpText).toBe(
+      'Please contact your admin if you have any question regarding the custom percentage.'
+    );
+  });
+
+  it('sets admin help text for custom threshold when isOrgAdmin is true', () => {
+    const notifPref = {
+      subscriptions: {
+        label: 'Subscriptions',
+        applications: {
+          usage: {
+            label: 'Usage',
+            eventTypes: [
+              {
+                name: 'CUSTOM_THRESHOLD',
+                label: 'Custom subscription threshold exceeded',
+                fields: [
+                  {
+                    name: 'bundles[subscriptions].applications[usage].eventTypes[CUSTOM_THRESHOLD].emailSubscriptionTypes[INSTANT]',
+                    label: 'Instant notification',
+                    severities: [
+                      {
+                        name: 'MODERATE',
+                        initialValue: false,
+                        disabled: false,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+    const result = prepareFields(
+      notifPref,
+      {},
+      {},
+      true,
+      85,
+      true // isOrgAdmin = true
+    );
+    const tab = result[0].fields[0];
+    const eventInput = tab.fields.find((f) => f.name === 'event-notifications');
+    const eventCard = eventInput.fields[0];
+
+    expect(eventCard.eventLabel).toBe('Usage at custom percentage');
+    expect(eventCard.description).toBe('Custom percentage has been set to 85%');
+    expect(eventCard.helpText).toBe(
+      'The custom percentage can be updated through Configure Events page.'
+    );
+  });
 });

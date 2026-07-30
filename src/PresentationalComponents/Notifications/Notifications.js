@@ -4,6 +4,7 @@ import { useFlag } from '@unleash/proxy-client-react';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import { useKesselRbacAccess } from '../../Utilities/kesselRbac';
 import { useCustomThreshold } from '../../Utilities/hooks/useCustomThreshold';
+import { useIsOrgAdmin } from '../../Utilities/hooks/useIsOrgAdmin';
 import { FormRenderer } from '@data-driven-forms/react-form-renderer';
 import { componentMapper } from '@data-driven-forms/pf4-component-mapper';
 import { Bullseye, Button, Popover, Spinner } from '@patternfly/react-core';
@@ -181,6 +182,7 @@ const Notifications = () => {
   const { auth } = useChrome();
   const { permissions: kesselMappedPermissions } = useKesselRbacAccess();
   const { threshold: customThreshold } = useCustomThreshold();
+  const { isOrgAdmin } = useIsOrgAdmin();
   const dispatch = useDispatch();
   const { addNotification } = useNotifications();
   const titleRef = useRef(null);
@@ -353,7 +355,8 @@ const Notifications = () => {
                     emailPref,
                     emailConfig,
                     platformNotificationsSeverity,
-                    customThreshold
+                    customThreshold,
+                    isOrgAdmin
                   ),
                 },
               ],
