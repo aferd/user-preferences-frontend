@@ -62,13 +62,15 @@ const afterChange = (formOptions, newValue, bundle, app) => {
  * @param {Record<string, unknown>} emailConfig
  * @param {boolean} [enableSeveritySubscriptionGrid=false] Unleash `platform.notifications.severity` — when true, event types that expose a severity grid render the severity subscription grid component.
  * @param {number} [customThreshold] Custom threshold percentage from org preferences
+ * @param {boolean} [isOrgAdmin=false] Whether the user is an organization administrator
  */
 export const prepareFields = (
   notifPref,
   emailPref,
   emailConfig,
   enableSeveritySubscriptionGrid = false,
-  customThreshold
+  customThreshold,
+  isOrgAdmin = false
 ) =>
   Object.entries(notifPref).reduce((acc, [bundleKey, bundleData]) => {
     return [
@@ -235,8 +237,9 @@ export const prepareFields = (
                           customThreshold !== undefined
                         ) {
                           cardProps.description = `Custom percentage has been set to ${customThreshold}%`;
-                          cardProps.helpText =
-                            'Please contact your admin if you have any question regarding the custom percentage.';
+                          cardProps.helpText = isOrgAdmin
+                            ? 'The custom percentage can be updated through Configure Events page.'
+                            : 'Please contact your admin if you have any question regarding the custom percentage.';
                         }
 
                         return cardProps;

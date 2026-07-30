@@ -227,4 +227,106 @@ describe('NotificationEventCard tests', () => {
 
     expect(afterChangeMock).toHaveBeenCalled();
   });
+
+  it('should render description when provided', () => {
+    render(
+      <Form onSubmit={() => undefined}>
+        {(props) => (
+          <RendererContext.Provider
+            value={
+              {
+                formOptions: {
+                  internalRegisterField: () => undefined,
+                  internalUnRegisterField: () => undefined,
+                } as any,
+              } as any
+            }
+          >
+            <NotificationEventCard
+              name="test-event"
+              eventName="CUSTOM_THRESHOLD"
+              eventLabel="Usage at custom percentage"
+              subscriptionFields={sampleFields}
+              bundle="subscriptions"
+              app="usage"
+              description="Custom percentage has been set to 85%"
+              {...(props as any)}
+            />
+          </RendererContext.Provider>
+        )}
+      </Form>
+    );
+
+    expect(
+      screen.getByText('Custom percentage has been set to 85%')
+    ).toBeInTheDocument();
+  });
+
+  it('should render help icon with tooltip for non-admin', () => {
+    render(
+      <Form onSubmit={() => undefined}>
+        {(props) => (
+          <RendererContext.Provider
+            value={
+              {
+                formOptions: {
+                  internalRegisterField: () => undefined,
+                  internalUnRegisterField: () => undefined,
+                } as any,
+              } as any
+            }
+          >
+            <NotificationEventCard
+              name="test-event"
+              eventName="CUSTOM_THRESHOLD"
+              eventLabel="Usage at custom percentage"
+              subscriptionFields={sampleFields}
+              bundle="subscriptions"
+              app="usage"
+              helpText="Please contact your admin if you have any question regarding the custom percentage."
+              {...(props as any)}
+            />
+          </RendererContext.Provider>
+        )}
+      </Form>
+    );
+
+    // Help icon should be present
+    const helpIcon = screen.getByRole('img', { hidden: true });
+    expect(helpIcon).toBeInTheDocument();
+  });
+
+  it('should render help icon with tooltip for admin', () => {
+    render(
+      <Form onSubmit={() => undefined}>
+        {(props) => (
+          <RendererContext.Provider
+            value={
+              {
+                formOptions: {
+                  internalRegisterField: () => undefined,
+                  internalUnRegisterField: () => undefined,
+                } as any,
+              } as any
+            }
+          >
+            <NotificationEventCard
+              name="test-event"
+              eventName="CUSTOM_THRESHOLD"
+              eventLabel="Usage at custom percentage"
+              subscriptionFields={sampleFields}
+              bundle="subscriptions"
+              app="usage"
+              helpText="The custom percentage can be updated through Configure Events page."
+              {...(props as any)}
+            />
+          </RendererContext.Provider>
+        )}
+      </Form>
+    );
+
+    // Help icon should be present
+    const helpIcon = screen.getByRole('img', { hidden: true });
+    expect(helpIcon).toBeInTheDocument();
+  });
 });
