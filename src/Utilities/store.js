@@ -3,7 +3,6 @@ import ReducerRegistry, {
   applyReducerHash,
 } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import promiseMiddleware from 'redux-promise-middleware';
-import reduxLogger from 'redux-logger';
 import emailReducer, {
   emailInitialState,
 } from '../redux/reducers/email-reducer';
@@ -15,9 +14,16 @@ export const RegistryContext = createContext({
   getRegistry: () => {},
 });
 
-const middlewares = [promiseMiddleware, reduxLogger].filter(
-  (middleware) => typeof middleware === 'function'
-);
+const middlewares = [promiseMiddleware];
+
+if (process.env.NODE_ENV !== 'production') {
+  // Development only — excluded from production bundles by webpack dead-code elimination
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+  const reduxLogger = require('redux-logger').default;
+  if (typeof reduxLogger === 'function') {
+    middlewares.push(reduxLogger);
+  }
+}
 
 export const registry = new ReducerRegistry({}, middlewares);
 
