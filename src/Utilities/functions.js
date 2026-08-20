@@ -20,9 +20,9 @@ const withNegatedFunction = (booleanFunctions) => {
 
 const hasLoosePermissions = async (
   permissions = [],
-  { isV2Org = false, kesselMappedPermissions = [] } = {}
+  { isKesselEnabled = false, kesselMappedPermissions = [] } = {}
 ) => {
-  if (isV2Org) {
+  if (isKesselEnabled) {
     const { mapV1PermissionToKesselRelation } = await import(
       './kesselWorkspaceRelations'
     );

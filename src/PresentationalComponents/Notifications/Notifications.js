@@ -178,7 +178,7 @@ const Notifications = () => {
     PLATFORM_NOTIFICATIONS_SEVERITY_FLAG
   );
   const isVAEnabled = useFlag('platform.va.environment.enabled');
-  const isV2Org = useFlag('platform.rbac.workspaces');
+  const isKesselEnabled = useFlag('platform.chrome.kessel');
   const { auth } = useChrome();
   const { permissions: kesselMappedPermissions } = useKesselRbacAccess();
   const { threshold: customThreshold } = useCustomThreshold();
@@ -208,7 +208,7 @@ const Notifications = () => {
       await auth.getUser();
       setEmailConfig(
         calculateEmailConfig(config, dispatch, {
-          isV2Org,
+          isKesselEnabled,
           kesselMappedPermissions,
         })
       );
@@ -256,7 +256,7 @@ const Notifications = () => {
         submitEmail &&
           setEmailConfig(
             calculateEmailConfig(config, dispatch, {
-              isV2Org,
+              isKesselEnabled,
               kesselMappedPermissions,
             })
           );

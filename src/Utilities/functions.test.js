@@ -327,7 +327,7 @@ describe('dispatchMessages', () => {
 
 describe('hasLoosePermissions with v2 (Kessel)', () => {
   const v2Context = {
-    isV2Org: true,
+    isKesselEnabled: true,
     kesselMappedPermissions: [
       { permission: 'advisor:*:read', resourceDefinitions: [] },
       { permission: 'user-preferences:*:write', resourceDefinitions: [] },
@@ -369,7 +369,7 @@ describe('hasLoosePermissions with v2 (Kessel)', () => {
   it('returns false with empty Kessel permissions array', async () => {
     const result = await visibilityFunctions.hasLoosePermissions(
       ['advisor:*:read'],
-      { isV2Org: true, kesselMappedPermissions: [] }
+      { isKesselEnabled: true, kesselMappedPermissions: [] }
     );
     expect(result).toBe(false);
   });
@@ -385,7 +385,7 @@ describe('hasLoosePermissions with v2 (Kessel)', () => {
   it('grants insights permissions even without Kessel perms', async () => {
     const result = await visibilityFunctions.hasLoosePermissions(
       ['insights:*:read'],
-      { isV2Org: true, kesselMappedPermissions: [] }
+      { isKesselEnabled: true, kesselMappedPermissions: [] }
     );
     expect(result).toBe(true);
   });

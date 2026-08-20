@@ -39,24 +39,10 @@ const AppInner: React.FC = () => {
   );
 };
 
-/**
- * Version router: reads the platform.rbac.workspaces flag and renders with or without Kessel providers.
- * This matches the pattern from insights-rbac-ui/src/Iam.tsx
- */
 const VersionRouter: React.FC = () => {
-  const hasRbacV2 = useFlag('platform.rbac.workspaces');
+  const isKesselEnabled = useFlag('platform.chrome.kessel');
 
-  // Make v2 flag available to functions.js
-  useEffect(() => {
-    // eslint-disable-next-line rulesdir/no-chrome-api-call-from-window
-    if (window.insights?.chrome) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, rulesdir/no-chrome-api-call-from-window
-      (window.insights.chrome as any)._isRbacV2Org = hasRbacV2;
-    }
-  }, [hasRbacV2]);
-
-  return hasRbacV2 ? (
-    // RBAC v2: Wrap with Kessel providers
+  return isKesselEnabled ? (
     <AccessCheck.Provider
       baseUrl={window.location.origin}
       apiPath="/api/kessel/v1beta2"
@@ -66,7 +52,6 @@ const VersionRouter: React.FC = () => {
       </KesselRbacAccessProvider>
     </AccessCheck.Provider>
   ) : (
-    // RBAC v1: No Kessel providers needed
     <AppInner />
   );
 };

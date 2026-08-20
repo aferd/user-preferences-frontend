@@ -161,11 +161,8 @@ export const RbacV2Org = {
   render: () => <Notifications />,
   parameters: {
     featureFlags: {
-      'platform.rbac.workspaces': true, // Enable v2 org
+      'platform.chrome.kessel': true,
       'platform.notifications.severity': true,
-    },
-    chrome: {
-      _isRbacV2Org: true,
     },
   },
   play: async ({ canvasElement }) => {
